@@ -11,6 +11,10 @@ Celem jest zbudowanie stabilnego serwera działającego 24/7, który w przyszło
 
 Projekt ma pokazać, że tani komputer z drugiej ręki może stać się w pełni funkcjonalnym serwerem domowym.
 
+<p align="center">
+  <img src="hardware/photos/IMG_5915.jpg" width="500" alt="Komputer kupiony za 100 zł">
+</p>
+
 ---
 
 ## Sprzęt
@@ -24,14 +28,23 @@ Konfiguracja początkowa (100 zł):
 - HDD 500 GB  
 - Windows 7 (do usunięcia)
 
-Modyfikacje / Upgrade:
-- zwiększenie RAM do 16 GB  
-- instalacja SSD 120 GB pod system  
+### Modyfikacje / Upgrade:
+
+#### Dodanie RAM (16 GB)
+<p align="center">
+  <img src="hardware/photos/IMG_5912.jpg" width="500" alt="Rozbudowa RAM do 16 GB">
+</p>
+
+#### Instalacja SSD 120 GB na system
+<p align="center">
+  <img src="hardware/photos/IMG_5914.jpg" width="500" alt="Instalacja SSD">
+</p>
+
+#### Pozostałe modyfikacje:
 - wymiana pasty termicznej  
 - czyszczenie wnętrza obudowy  
 - wymiana wentylatora na cichszy (Arctic F9)  
-- test działania pod obciążeniem
-
+- test stabilności i temperatur 
 ---
 
 ## Instalacja oprogramowania
