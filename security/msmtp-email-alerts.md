@@ -3,33 +3,43 @@ Konfiguracja powiadomień e-mail z Fail2Ban (msmtp + WP)
 Dokument opisuje wdrożenie klienta SMTP (msmtp) z serwerem WP oraz integrację z Fail2Ban w celu automatycznego wysyłania szczegółowych alertów o zablokowanych adresach IP.
 
 1. Instalacja wymaganych pakietów
+```bash
 sudo apt update
 sudo apt install -y msmtp msmtp-mta mailutils whois geoip-bin
+```
 
 2. Konfiguracja globalna msmtp (/etc/msmtprc)
 
 Plik zawiera ustawienia połączenia SMTP dla konta WP:
 
+```bash
 defaults
 auth           on
 tls            on
 tls_starttls   on
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
 logfile        /var/log/msmtp.log
+```
 
+```bash
 account wp
 host smtp.wp.pl
 port 587
 from "e-mail"
 user "e-mail"
 password "haslo do aplikacji"
+```
 
+```bash
 account default : wp
+```
 
 
 Uprawnienia:
 
+```bash
 sudo chmod 600 /etc/msmtprc
+```
 
 
 Test działania:
@@ -40,31 +50,42 @@ echo "Test wiadomości" | msmtp "e-mail"
 
 Plik:
 
+```bash
 /etc/fail2ban/action.d/msmtp-extended.conf
+```
 
 
 Akcja generuje pełny raport o banie (IP, hostname, kraj, ISP, logi):
 
+```bash
 [Definition]
 actionstart =
 actionstop =
 actioncheck =
+```
 
+```bash
 actionban = bash -c '
 IP="<ip>";
 COUNTRY=$(geoiplookup "$IP" | awk -F ": " "{print \$2}");
 HOSTNAME=$(host "$IP" 2>/dev/null | awk "/domain name pointer/ {print \$5}");
 ISP=$(whois "$IP" 2>/dev/null | grep -Ei "OrgName|organisation|owner" | head -n 1 | sed "s/.*: //");
 LOGS=$(grep "$IP" /var/log/auth.log | tail -n 10);
+```
 
+```bash
 COUNTRY=${COUNTRY:-unknown};
 HOSTNAME=${HOSTNAME:-unknown};
 ISP=${ISP:-unknown};
+```
 
+```bash
 printf "Subject: [Fail2Ban] SSH BAN: $IP ($COUNTRY)\n";
 printf "From: <sender>\n";
 printf "To: <dest>\n\n";
+```
 
+```bash
 printf "=== Fail2Ban Security Alert ===\n\n";
 printf "IP Address:  $IP\n";
 printf "Hostname:    $HOSTNAME\n";
@@ -72,44 +93,61 @@ printf "Country:     $COUNTRY\n";
 printf "ISP:         $ISP\n";
 printf "Date:        $(date)\n";
 printf "Service:     SSH\n\n";
+```
 
+```bash
 printf "--- Related log entries ---\n$LOGS\n\n";
 ' | msmtp -a default <dest>
+```
 
+```bash
 actionunban = printf "Subject: [Fail2Ban] SSH UNBAN for <ip>\nFrom: <sender>\nTo: <dest>\n\nIP <ip> został odbanowany." | msmtp -a default <dest>
+```
 
+```bash
 [Init]
 sender = "e-mail"
 dest = "e-mail"
+```
 
 4. Konfiguracja Fail2Ban (/etc/fail2ban/jail.local)
+```bash
 [DEFAULT]
 bantime = 1h
 findtime = 10m
 maxretry = 5
 backend = systemd
+```
 
 sender = "e-mail"
 dest = "e-mail"
+```bash
 action = msmtp-extended[name=SSH Ban, dest="%(dest)s"]
+```
 
+```bash
 [sshd]
 enabled = true
 port = 22
 filter = sshd
 logpath = /var/log/auth.log
 maxretry = 5
+```
 
 
 Restart usługi:
 
+```bash
 sudo systemctl restart fail2ban
+```
 
 5. Test działania powiadomień
 
 Ręczne wywołanie bana:
 
+```bash
 sudo fail2ban-client set sshd banip 8.8.8.8
+```
 
 
 Przykład danych w powiadomieniu:

@@ -3,68 +3,94 @@ UFW Firewall – Konfiguracja zabezpieczeń serwera (wersja skondensowana)
 Dokument opisuje zastosowaną konfigurację zapory UFW na serwerze, której celem jest ograniczenie powierzchni ataku, kontrola dostępu do usług oraz logowanie prób połączeń.
 
 1. Instalacja (jeśli brak)
+```bash
 sudo apt update
 sudo apt install -y ufw
+```
 
 2. Domyślne polityki bezpieczeństwa
 
 Cały ruch przychodzący jest blokowany, a ruch wychodzący dozwolony:
 
+```bash
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
+```
 
 3. Dostęp do SSH
 
 Domyślny port:
 
+```bash
 sudo ufw allow 22/tcp
+```
 
 
 Jeśli SSH działa na innym porcie (np. 2222):
 
+```bash
 sudo ufw allow 2222/tcp
+```
 
 4. Dostęp do dodatkowych usług (wg potrzeb)
 
 Najczęściej używane reguły:
 
+```bash
 HTTP/HTTPS
 sudo ufw allow 80/tcp
 sudo ufw allow 443/tcp
+```
 
 DNS (własny serwer DNS)
+```bash
 sudo ufw allow 53
+```
 
 Serwer Minecraft
+```bash
 sudo ufw allow 25565/tcp
+```
 
 Reverse proxy (np. Traefik, NPM)
+```bash
 sudo ufw allow 8080/tcp
+```
 
 5. Włączenie zapory
+```bash
 sudo ufw enable
+```
 
 
 Status i szczegółowe reguły:
 
+```bash
 sudo ufw status verbose
+```
 
 6. Logowanie ruchu
 
 Aktywacja logów:
 
+```bash
 sudo ufw logging on
+```
 
 
 Logi dostępne są w:
 
+```bash
 /var/log/ufw.log
+```
 
 7. Dodatkowe zabezpieczenia systemowe (opcjonalne)
 
 Reguły minimalizujące ryzyko skanowania i floodu SYN znajdują się w:
 
+```bash
 /etc/ufw/sysctl.conf
+```
 
 
 Dodane ustawienia:
@@ -76,12 +102,16 @@ net/ipv4/conf/default/rp_filter=1
 
 Zastosowanie zmian:
 
+```bash
 sudo ufw reload
+```
 
 8. Reset UFW (w razie problemów)
+```bash
 sudo ufw disable
 sudo ufw reset
 sudo ufw enable
+```
 
 Podsumowanie konfiguracji
 
