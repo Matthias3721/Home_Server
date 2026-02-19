@@ -94,9 +94,12 @@ Aktualne zdjęcia i etapy instalacji znajdują się w `hardware/photos/`.
 
 ---
 
-## Status projektu
+## Status projektu (stan na 2026-02-19)
 
-Projekt jest w trakcie budowy i będzie aktualizowany na bieżąco.
+- **Minecraft Forge** (Docker) — dostęp tylko lokalnie/Tailscale
+- **deal-monitor** (Spring Boot + PostgreSQL) — działa w Docker Compose
+- **mobilfix** (PHP/Apache w Docker) — działa (formularz `send.php`)
+- **Cloudflare Tunnel** — wystawianie usług na zewnątrz bez otwierania portów
 
 ---
 
