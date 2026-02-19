@@ -1,0 +1,19 @@
+services:
+  minecraft:
+    image: itzg/minecraft-server
+    container_name: minecraft
+    ports:
+      - "25565:25565"
+    environment:
+      EULA: "TRUE"
+      TYPE: "FORGE"
+      VERSION: "1.21.1"
+      FORGE_VERSION: "60.1.0"
+      MEMORY: "6G"
+      ENABLE_RCON: "true"
+      RCON_PASSWORD: "serwirhaslo"
+      JVM_XX_OPTS: "-XX:+UseG1GC"
+      ONLINE_MODE: "FALSE"
+    volumes:
+      - ./data:/data
+    restart: unless-stopped

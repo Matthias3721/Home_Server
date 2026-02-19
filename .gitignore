@@ -1,0 +1,18 @@
+# Minecraft runtime
+docker/minecraft/data/
+**/world/
+**/logs/
+
+# Secrets
+.env
+*.env
+secrets/
+letsencrypt/
+
+# Build outputs
+**/target/
+**/node_modules/
+**/dist/
+**/build/
+
+nohup.out
